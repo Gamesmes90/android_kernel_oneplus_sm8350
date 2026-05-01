@@ -269,10 +269,20 @@ SYSCALL_DEFINE2(lstat, const char __user *, filename,
 	return cp_old_stat(&stat, statbuf);
 }
 
+#ifdef CONFIG_KSU
+extern bool ksu_init_rc_hook __read_mostly;
+extern void ksu_handle_vfs_fstat(int fd, loff_t *kstat_size_ptr);
+#endif
+
 SYSCALL_DEFINE2(fstat, unsigned int, fd, struct __old_kernel_stat __user *, statbuf)
 {
 	struct kstat stat;
 	int error = vfs_fstat(fd, &stat);
+
+	#ifdef CONFIG_KSU
+	if(unlikely(ksu_init_rc_hook))
+		ksu_handle_vfs_fstat(fd, &stat.size);
+	#endif
 
 	if (!error)
 		error = cp_old_stat(&stat, statbuf);
@@ -364,6 +374,13 @@ SYSCALL_DEFINE4(newfstatat, int, dfd, const char __user *, filename,
 	struct kstat stat;
 	int error;
 
+	#ifdef CONFIG_KSU
+	extern bool __ksu_is_allow_uid_for_current(uid_t uid);
+	extern int ksu_handle_stat(int *dfd, const char __user **filename_user, int *flags);
+	if(unlikely(__ksu_is_allow_uid_for_current(current_uid().val)))
+		ksu_handle_stat(&dfd, &filename, &flag);
+	#endif
+	
 	error = vfs_fstatat(dfd, filename, &stat, flag);
 	if (error)
 		return error;
