@@ -12,6 +12,8 @@ KernelSU Next is implemented through a series of manual hooks
 | [ kernel/sys.c ]( ./kernel/sys.c#L620-L638 )                   | ksu_handle_setresuid           | __sys_setresuid     |
 | [ kernel/reboot.c ]( ./kernel/reboot.c#L305-L325 )             | ksu_handle_sys_reboot          | reboot              |
 
+Commit: [bcf36e35d24b8d8e8af151c1a00cecaa034d8eb9](https://github.com/Gamesmes90/android_kernel_oneplus_sm8350/commit/bcf36e35d24b8d8e8af151c1a00cecaa034d8eb9)
+
 KernelSU Next Branch: [Legacy](./init_ksu.sh)
 
 ### Sources
