@@ -1,0 +1,45 @@
+name: Sync with upstream
+
+on:
+  schedule:
+    - cron: '0 0 * * *'
+  workflow_dispatch:
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.TOKEN }}
+
+      - name: Setup git identity
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+      - name: Add upstream remote
+        run: git remote add upstream https://github.com/LineageOS/android_kernel_oneplus_sm8350.git
+
+      - name: Fetch upstream
+        run: git fetch upstream
+
+      # Sync lineage branch with the upstream
+      - name: Reset lineage branch to match upstream
+        run: |
+          git checkout -b lineage-23.2 origin/lineage-23.2
+          git reset --hard upstream/lineage-23.2
+
+      - name: Push upstream branch
+        run: git push origin lineage-23.2 --force
+
+      # Rebase working branch on top of the updated upstream branch
+      - name: Rebase working branch onto upstream branch
+        run: |
+          git checkout android-16
+          git merge lineage-23.2
+
+      - name: Push working branch
+        run: git push origin android-16 --force-with-lease
