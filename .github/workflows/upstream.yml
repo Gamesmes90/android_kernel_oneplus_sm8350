@@ -39,7 +39,35 @@ jobs:
       - name: Rebase working branch onto upstream branch
         run: |
           git checkout android-16
+          
+          # Store the current commit hash
+          OLD_HASH=$(git rev-parse HEAD)
+          
+          # Merge the updated upstream branch
           git merge lineage-23.2
+          
+          # Store the new commit hash
+          NEW_HASH=$(git rev-parse HEAD)
+          
+          # Compare the hashes to see if anything actually changed
+          if [ "$OLD_HASH" != "$NEW_HASH" ]; then
+            echo "updated=true" >> $GITHUB_OUTPUT
+            echo "Changes detected and merged."
+          else
+            echo "updated=false" >> $GITHUB_OUTPUT
+            echo "No changes detected. Skipping push and build trigger."
+          fi
 
       - name: Push working branch
+        if: steps.check_changes.outputs.updated == 'true'
         run: git push origin android-16 --force-with-lease
+
+      - name: Trigger Remote Build Workflow
+        if: steps.check_changes.outputs.updated == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.TOKEN }}
+        run: |
+          # Triggers the workflow in the other repository
+          gh workflow run build.yml \
+            --repo Gamesmes90/build_android_kernel_oneplus_sm8350 \
+            --ref android-16
