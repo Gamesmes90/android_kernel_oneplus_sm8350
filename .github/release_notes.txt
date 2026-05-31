@@ -8,6 +8,7 @@
 
 ## Features
 - **KernelSU Next** v3.2.0
+- **SUSFS** v2.1.0
 - **BORE** Scheduler
 - **BBR** Congestion algorithm
 - **FQ** Fair Queue Scheduling
