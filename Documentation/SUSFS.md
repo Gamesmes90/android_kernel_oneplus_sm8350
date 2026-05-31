@@ -9,4 +9,5 @@ Patch (exact commit): [susfs_patch_to_5.4.patch](https://github.com/JackA1ltman/
 
 ### Sources
 [NonGKI_Kernel_Build_2nd](https://github.com/JackA1ltman/NonGKI_Kernel_Build_2nd) - Patch
+
 [susfs4ksu](https://gitlab.com/simonpunk/susfs4ksu) - Original repository
