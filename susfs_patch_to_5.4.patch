@@ -1744,7 +1744,11 @@ index 4960c69cc47c..5a5f082c87b2 100644
  		buf->f_flags = calculate_f_flags(path->mnt);
 diff --git a/fs/susfs.c b/fs/susfs.c
 new file mode 100644
+<<<<<<< susfs_patch_to_5.4.patch
 index 000000000000..4d3b7d3369bf
+=======
+index 0000000..32768e5
+>>>>>>> new-patch.patch
 --- /dev/null
 +++ b/fs/susfs.c
 @@ -0,0 +1,1494 @@
@@ -1867,8 +1871,8 @@ index 000000000000..4d3b7d3369bf
 +		info.err = -ENOMEM;
 +		goto out_copy_to_user;
 +	}
-+	strncpy(new_list->info.target_pathname, info.target_pathname, SUSFS_MAX_LEN_PATHNAME - 1);
-+	strncpy(new_list->target_pathname, info.target_pathname, SUSFS_MAX_LEN_PATHNAME - 1);
++	strscpy(new_list->info.target_pathname, info.target_pathname, SUSFS_MAX_LEN_PATHNAME - 1);
++	strscpy(new_list->target_pathname, info.target_pathname, SUSFS_MAX_LEN_PATHNAME - 1);
 +	INIT_LIST_HEAD(&new_list->list);
 +	mutex_lock(&susfs_mutex_lock_sus_path);
 +	list_add_tail_rcu(&new_list->list, &LH_SUS_PATH_LOOP);
@@ -2379,10 +2383,10 @@ index 000000000000..4d3b7d3369bf
 +	if (!strcmp(info.release, "default")) {
 +		strscpy(my_uname.release, utsname()->release, __NEW_UTS_LEN);
 +	} else {
-+		strncpy(my_uname.release, info.release, __NEW_UTS_LEN);
++		strscpy(my_uname.release, info.release, __NEW_UTS_LEN);
 +	}
 +	if (!strcmp(info.version, "default")) {
-+		strscpy(my_uname.version, utsname()->version, __NEW_UTS_LEN);
++		strscpy(my_uname.version, info.version, __NEW_UTS_LEN);
 +	} else {
 +		strncpy(my_uname.version, info.version, __NEW_UTS_LEN);
 +	}
@@ -2407,8 +2411,8 @@ index 000000000000..4d3b7d3369bf
 +
 +	do {
 +		seq = read_seqbegin(&susfs_uname_seqlock);
-+		strncpy(tmp->release, my_uname.release, __NEW_UTS_LEN);
-+		strncpy(tmp->version, my_uname.version, __NEW_UTS_LEN);
++		strscpy(tmp->release, my_uname.release, __NEW_UTS_LEN);
++		strscpy(tmp->version, my_uname.version, __NEW_UTS_LEN);
 +	} while (read_seqretry(&susfs_uname_seqlock, seq));
 +}
 +#endif // #ifdef CONFIG_KSU_SUSFS_SPOOF_UNAME
@@ -2477,7 +2481,7 @@ index 000000000000..4d3b7d3369bf
 +	}
 +
 +	write_seqlock(&susfs_fake_cmdline_or_bootconfig_seqlock);
-+	strncpy(fake_cmdline_or_bootconfig,
++	strscpy(fake_cmdline_or_bootconfig,
 +			info->fake_cmdline_or_bootconfig,
 +			SUSFS_FAKE_CMDLINE_OR_BOOTCONFIG_SIZE - 1);
 +	write_sequnlock(&susfs_fake_cmdline_or_bootconfig_seqlock);
@@ -2605,8 +2609,8 @@ index 000000000000..4d3b7d3369bf
 +	new_entry_redirected->reversed_lookup_only = true;
 +	new_entry_redirected->spoofed_mnt_id = real_mount(target_path.mnt)->mnt_id;
 +	memcpy(&new_entry_redirected->spoofed_kstatfs, &new_entry_target->spoofed_kstatfs, sizeof(struct kstatfs));
-+	strncpy(new_entry_redirected->info.target_pathname, info.redirected_pathname, SUSFS_MAX_LEN_PATHNAME - 1);
-+	strncpy(new_entry_redirected->info.redirected_pathname, info.target_pathname, SUSFS_MAX_LEN_PATHNAME - 1);
++	strscpy(new_entry_redirected->info.target_pathname, info.redirected_pathname, SUSFS_MAX_LEN_PATHNAME - 1);
++	strscpy(new_entry_redirected->info.redirected_pathname, info.target_pathname, SUSFS_MAX_LEN_PATHNAME - 1);
 +
 +	// check for existing entries, delete it first if so
 +	mutex_lock(&susfs_mutex_lock_open_redirect);
@@ -2763,7 +2767,7 @@ index 000000000000..4d3b7d3369bf
 +				srcu_read_unlock(&susfs_srcu_open_redirect, srcu_idx);
 +				return -ENAMETOOLONG;
 +			}
-+			strncpy(tmp_buf, entry->info.redirected_pathname, SUSFS_MAX_LEN_PATHNAME - 1);
++			strscpy(tmp_buf, entry->info.redirected_pathname, SUSFS_MAX_LEN_PATHNAME - 1);
 +			srcu_read_unlock(&susfs_srcu_open_redirect, srcu_idx);
 +			return 0;
 +		}
@@ -2832,7 +2836,7 @@ index 000000000000..4d3b7d3369bf
 +					entry->info.target_pathname);
 +			*out_ino = entry->redirected_ino;
 +			*out_dev = entry->redirected_dev;
-+			strncpy(spoofed_name, entry->info.redirected_pathname, SUSFS_MAX_LEN_PATHNAME - 1);
++			strscpy(spoofed_name, entry->info.redirected_pathname, SUSFS_MAX_LEN_PATHNAME - 1);
 +			srcu_read_unlock(&susfs_srcu_open_redirect, srcu_idx);
 +			return 0;
 +		}
@@ -2915,7 +2919,7 @@ index 000000000000..4d3b7d3369bf
 +		SUSFS_LOGE("bufsize is not big enough to hold the string.\n");
 +		return -EINVAL;
 +	}
-+	strncpy(buf_ptr, config_string, tmp_size);
++	memcpy(buf_ptr, config_string, tmp_size);
 +	return 0;
 +}
 +
@@ -3002,7 +3006,7 @@ index 000000000000..4d3b7d3369bf
 +		goto out_copy_to_user;
 +	}
 +
-+	strncpy(info.susfs_variant, SUSFS_VARIANT, SUSFS_MAX_VARIANT_BUFSIZE-1);
++	strscpy(info.susfs_variant, SUSFS_VARIANT, SUSFS_MAX_VARIANT_BUFSIZE-1);
 +	info.err = 0;
 +out_copy_to_user:
 +	if (copy_to_user((struct st_susfs_variant __user*)*user_info, &info, sizeof(info))) {
@@ -3020,7 +3024,7 @@ index 000000000000..4d3b7d3369bf
 +		goto out_copy_to_user;
 +	}
 +
-+	strncpy(info.susfs_version, SUSFS_VERSION, SUSFS_MAX_VERSION_BUFSIZE-1);
++	strscpy(info.susfs_version, SUSFS_VERSION, SUSFS_MAX_VERSION_BUFSIZE-1);
 +	info.err = 0;
 +out_copy_to_user:
 +	if (copy_to_user((struct st_susfs_version __user*)*user_info, &info, sizeof(info))) {
@@ -3244,7 +3248,11 @@ index 000000000000..4d3b7d3369bf
 +
 diff --git a/include/linux/susfs.h b/include/linux/susfs.h
 new file mode 100644
+<<<<<<< susfs_patch_to_5.4.patch
 index 000000000000..45c0f532b02b
+=======
+index 0000000..6ede629
+>>>>>>> new-patch.patch
 --- /dev/null
 +++ b/include/linux/susfs.h
 @@ -0,0 +1,241 @@
@@ -3259,7 +3267,7 @@ index 000000000000..45c0f532b02b
 +#include <linux/susfs_def.h>
 +#include <linux/statfs.h>
 +
-+#define SUSFS_VERSION "v2.1.0"
++#define SUSFS_VERSION "v2.2.0"
 +#if LINUX_VERSION_CODE < KERNEL_VERSION(5,0,0)
 +#define SUSFS_VARIANT "NON-GKI"
 +#else
@@ -3491,7 +3499,11 @@ index 000000000000..45c0f532b02b
 +#endif
 diff --git a/include/linux/susfs_def.h b/include/linux/susfs_def.h
 new file mode 100644
+<<<<<<< susfs_patch_to_5.4.patch
 index 000000000000..698b1ab103d5
+=======
+index 0000000..e91c5db
+>>>>>>> new-patch.patch
 --- /dev/null
 +++ b/include/linux/susfs_def.h
 @@ -0,0 +1,171 @@
@@ -3544,8 +3556,8 @@ index 000000000000..698b1ab103d5
 +#define TRY_UMOUNT_DETACH 1 /* used by susfs_try_umount() */
 +
 +#define VFSMOUNT_MNT_FLAGS_KSU_UNSHARED_MNT 0x80000000 /* used for mounts that are unshared by ksu process */
-+#define DEFAULT_KSU_MNT_ID 500000 /* used for mounts created or single cloned by ksu process */
-+#define DEFAULT_KSU_MNT_GROUP_ID 5000 /* used by mount->mnt_group_id */
++#define DEFAULT_KSU_MNT_ID 2000000000 /* used for mounts created or single cloned by ksu process */
++#define DEFAULT_KSU_MNT_GROUP_ID 200000 /* used by mount->mnt_group_id */
 +
 +#ifndef FUSE_SUPER_MAGIC
 +#define FUSE_SUPER_MAGIC 0x65735546
