@@ -16,6 +16,8 @@ Commit: [bcf36e35d24b8d8e8af151c1a00cecaa034d8eb9](https://github.com/Gamesmes90
 
 KernelSU Next Branch: [Legacy](../init_ksu.sh)
 
+**Important Note**: Upstream KernelSU Next has removed ``legacy-susfs`` branch. That branch is now maintained [here](https://github.com/Gamesmes90/KernelSU-Next/tree/legacy-susfs). This change is reflected in the [init_ksu.sh](../init_ksu.sh) script.
+
 ### Sources
 [ÆSIR Kernel](https://github.com/bcrtvkcs/aesir_kernel_oneplus_sm8350)
 [KernelSU non-gki integration](https://kernelsu.org/guide/how-to-integrate-for-non-gki.html)
