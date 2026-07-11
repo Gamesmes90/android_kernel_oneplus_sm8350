@@ -35,8 +35,9 @@ jobs:
       - name: Push upstream branch
         run: git push origin lineage-23.2 --force
 
-      # Rebase working branch on top of the updated upstream branch
-      - name: Rebase working branch onto upstream branch
+      # Merge working branch with updated upstream branch
+      - name: Merge working branch with upstream branch
+        id: check_changes
         run: |
           git checkout android-16
           
