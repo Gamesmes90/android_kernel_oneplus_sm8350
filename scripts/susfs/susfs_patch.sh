@@ -34,7 +34,7 @@ if [[ -z "${1:-}" ]] then
 fi
 
 # Download patch from HEAD
-curl -o new-patch.patch https://raw.githubusercontent.com/JackA1ltman/NonGKI_Kernel_Build_2nd/refs/heads/mainline/Patches/Patch/$PATCH_FILE
+curl -O https://raw.githubusercontent.com/JackA1ltman/NonGKI_Kernel_Build_2nd/refs/heads/mainline/Patches/Patch/$PATCH_FILE
 
 # Save new hash (for documentation)
 echo  $(curl -s \
@@ -45,7 +45,7 @@ echo  $(curl -s \
 git checkout --detach $UPSTREAM
 
 # Apply the patch
-git apply --reject --whitespace=fix new-patch.patch || true
+git apply --reject --whitespace=fix $PATCH_FILE || true
 
 # Check for rej files and merge them
 rejs_found=0
@@ -80,7 +80,7 @@ git commit -am "$1"
 HASH=$(git rev-parse --short HEAD)
 
 # Delete patch file
-rm new-patch.patch
+rm $PATCH_FILE
 
 # Checkout to working branch
 git checkout $TARGET
