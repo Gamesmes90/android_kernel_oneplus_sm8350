@@ -71,7 +71,7 @@
 #define ND_STATE_LOOKUP_LAST 32
 #define ND_STATE_OPEN_LAST 64
 #define ND_FLAGS_LOOKUP_LAST		0x2000000
- 
+
 #define MAGIC_MOUNT_WORKDIR "/debug_ramdisk/workdir"
 
 
