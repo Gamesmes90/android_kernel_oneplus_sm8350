@@ -7,7 +7,7 @@
 ---
 
 ## Features
-- **KernelSU Next** v3.2.0
+- **KernelSU Next** v3.2.0 (Spoofed to v3.3.0)
 - **SUSFS** v2.2.0
 - **BORE** Scheduler
 - **BBR** Congestion algorithm
