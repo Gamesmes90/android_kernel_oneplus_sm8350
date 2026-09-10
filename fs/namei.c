@@ -1639,9 +1639,14 @@ static struct dentry *__lookup_hash(const struct qstr *name,
 	bool found_sus_path = false;
 #endif
 
+#ifdef CONFIG_KSU_SUSFS_SUS_PATH
 	if (dentry) {
 		return dentry;
 	}
+#else
+	if (dentry)
+		return dentry;
+#endif
 
 	/* Don't create child dentry for a dead directory. */
 	if (unlikely(IS_DEADDIR(dir)))
