@@ -12,7 +12,7 @@
 - **BORE** Scheduler
 - **BBR** Congestion algorithm
 - **FQ** Fair Queue Scheduling
-- **300Hz** Kernel timer interrupt frequency
+- **250Hz** Kernel timer interrupt frequency
 - **LZO** Compression algorithm
 ---
 
