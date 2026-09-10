@@ -36,11 +36,6 @@ fi
 # Download patch from HEAD
 curl -O https://raw.githubusercontent.com/JackA1ltman/NonGKI_Kernel_Build_2nd/refs/heads/mainline/Patches/Patch/$PATCH_FILE
 
-# Save new hash (for documentation)
-echo  $(curl -s \
-        "https://api.github.com/repos/JackA1ltman/NonGKI_Kernel_Build_2nd/commits?path=Patches/Patch/susfs_patch_to_5.4.patch&sha=mainline&per_page=1" \
-        | jq -r '.[0].sha') > $DIR/patch_hash
-
 # Detach with upstream branch as base
 git checkout --detach $UPSTREAM
 
@@ -84,6 +79,11 @@ rm $PATCH_FILE
 
 # Checkout to working branch
 git checkout $TARGET
+
+# Save new hash (for documentation)
+echo  $(curl -s \
+        "https://api.github.com/repos/JackA1ltman/NonGKI_Kernel_Build_2nd/commits?path=Patches/Patch/susfs_patch_to_5.4.patch&sha=mainline&per_page=1" \
+        | jq -r '.[0].sha') > $DIR/patch_hash
 
 # Cherry pick the detached commit
 git cherry-pick $HASH
