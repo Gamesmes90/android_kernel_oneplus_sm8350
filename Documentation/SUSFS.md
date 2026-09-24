@@ -3,7 +3,7 @@ SUSFS is implemented through a [patch](https://github.com/JackA1ltman/NonGKI_Ker
 
 SUSFS version: 2.3.0
 
-Commit: [a754f398864d63f235800114cb1fb26f1dadeea6](https://github.com/Gamesmes90/android_kernel_oneplus_sm8350/commit/a754f398864d63f235800114cb1fb26f1dadeea6)
+Commit: [fef9dfc431b00e60ff194929bed2387e746b670b](https://github.com/Gamesmes90/android_kernel_oneplus_sm8350/commit/fef9dfc431b00e60ff194929bed2387e746b670b)
 
 Patch (exact commit): [susfs_patch_to_5.4.patch](https://github.com/JackA1ltman/NonGKI_Kernel_Build_2nd/blob/183beb3588cb67ed647b69b4d9a6acc216fc5732/Patches/Patch/susfs_patch_to_5.4.patch)
 
@@ -33,6 +33,8 @@ The patch workflow is managed by [susfs_patch.sh](../scripts/susfs/susfs_patch.s
 
 
 ### History
+- SUSFS v2.3.0
+    - [a754f398864d63f235800114cb1fb26f1dadeea6](https://github.com/Gamesmes90/android_kernel_oneplus_sm8350/commit/a754f398864d63f235800114cb1fb26f1dadeea6)
 - SUSFS v2.2.0
     - [a36d6631f8d65118238ab4691e99cc133e2324b4](https://github.com/Gamesmes90/android_kernel_oneplus_sm8350/commit/a36d6631f8d65118238ab4691e99cc133e2324b4)
     - [17dbf64255b576c7b8ae5ab6950ed8761e1b2f63](https://github.com/Gamesmes90/android_kernel_oneplus_sm8350/commit/17dbf64255b576c7b8ae5ab6950ed8761e1b2f63)
