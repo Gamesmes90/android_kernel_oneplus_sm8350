@@ -1666,6 +1666,8 @@ retry:
 	}
 #ifdef CONFIG_KSU_SUSFS_SUS_PATH
 	if (unlikely(dentry) && !IS_ERR(dentry) && dentry->d_inode && !found_sus_path && susfs_is_inode_sus_path(dentry->d_inode)) {
+		bool is_fuse = dentry->d_inode->i_sb->s_magic == FUSE_SUPER_MAGIC;
+
 		if (d_in_lookup(dentry))
 			d_lookup_done(dentry);
 		if (!(flags & LOOKUP_RCU))
@@ -1674,7 +1676,7 @@ retry:
 		//   it is trying to find the fuse sus path with the create flag, then
 		//   at least we can prevent the fake qstr file from from being created,
 		//   although it is futile to do this, it is better than doing nothing.
-		if (dentry->d_inode->i_sb->s_magic == FUSE_SUPER_MAGIC &&
+		if (is_fuse &&
 			(flags & (LOOKUP_CREATE | LOOKUP_EXCL)))
 			return ERR_PTR(-EACCES);
 		dentry = d_alloc(base, &susfs_fake_qstr_name);
@@ -3789,14 +3791,14 @@ static int do_tmpfile(struct nameidata *nd, unsigned flags,
 	{
 		fake_filename = susfs_open_redirect_spoof_do_sys_openat(path.dentry->d_inode);
 		if (fake_filename && !IS_ERR(fake_filename)) {
+			struct path fake_path;
+
+			/* filename_lookup() consumes fake_filename */
+			error = filename_lookup(old_dfd, fake_filename, flags | LOOKUP_DIRECTORY, &fake_path, NULL);
 			path_put(&path);
-			restore_nameidata();
-			set_nameidata(nd, old_dfd, fake_filename);
-			error = path_lookupat(nd, flags | LOOKUP_DIRECTORY, &path);
-			if (unlikely(error)) {
-				putname(fake_filename);
+			if (unlikely(error))
 				return error;
-			}
+			path = fake_path;
 		}
 	}
 #endif // #ifdef CONFIG_KSU_SUSFS_OPEN_REDIRECT
@@ -3844,14 +3846,14 @@ static int do_o_path(struct nameidata *nd, unsigned flags, struct file *file)
 		{
 			fake_filename = susfs_open_redirect_spoof_do_sys_openat(path.dentry->d_inode);
 			if (fake_filename && !IS_ERR(fake_filename)) {
+				struct path fake_path;
+
+				/* filename_lookup() consumes fake_filename */
+				error = filename_lookup(old_dfd, fake_filename, flags, &fake_path, NULL);
 				path_put(&path);
-				restore_nameidata();
-				set_nameidata(nd, old_dfd, fake_filename);
-				error = path_lookupat(nd, flags, &path);
-				if (unlikely(error)) {
-					putname(fake_filename);
+				if (unlikely(error))
 					return error;
-				}
+				path = fake_path;
 			}
 		}
 #endif // #ifdef CONFIG_KSU_SUSFS_OPEN_REDIRECT
@@ -3872,6 +3874,7 @@ static struct file *path_openat(struct nameidata *nd,
 #ifdef CONFIG_KSU_SUSFS_OPEN_REDIRECT
 	int old_dfd = nd->dfd;
 	struct filename *fake_filename = NULL;
+	struct filename *old_name = nd->name;
 #endif // #ifdef CONFIG_KSU_SUSFS_OPEN_REDIRECT
 	struct file *file;
 	int error;
@@ -3913,8 +3916,10 @@ static struct file *path_openat(struct nameidata *nd,
 		terminate_walk(nd);
 	}
 #ifdef CONFIG_KSU_SUSFS_OPEN_REDIRECT
-	if (fake_filename && !IS_ERR(fake_filename))
+	if (fake_filename && !IS_ERR(fake_filename)) {
+		nd->name = old_name;
 		putname(fake_filename);
+	}
 #endif // #ifdef CONFIG_KSU_SUSFS_OPEN_REDIRECT
 	if (likely(!error)) {
 		if (likely(file->f_mode & FMODE_OPENED))
