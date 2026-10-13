@@ -693,7 +693,7 @@ static void avc_audit_pre_callback(struct audit_buffer *ab, void *a)
 
 	audit_log_format(ab, " } for ");
 }
-#ifdef CONFIG_KSU_SUSFS
+#ifdef CONFIG_SUSFS
 extern u32 susfs_ksu_sid;
 extern u32 susfs_priv_app_sid;
 extern struct static_key_false susfs_is_avc_log_spoofing_enabled;
@@ -725,7 +725,7 @@ static void avc_audit_post_callback(struct audit_buffer *ab, void *a)
 	rc = security_sid_to_context(sad->state, sad->tsid, &scontext,
 				     &scontext_len);
 
-#ifdef CONFIG_KSU_SUSFS
+#ifdef CONFIG_SUSFS
 	if (static_branch_likely(&susfs_is_avc_log_spoofing_enabled)) {
 		if (unlikely(sad->tsid == susfs_ksu_sid)) {
 			if (rc)
@@ -744,7 +744,7 @@ static void avc_audit_post_callback(struct audit_buffer *ab, void *a)
 		kfree(scontext);
 	}
 
-#ifdef CONFIG_KSU_SUSFS
+#ifdef CONFIG_SUSFS
 bypass_orig_flow:
 #endif
 	audit_log_format(ab, " tclass=%s", secclass_map[sad->tclass-1].name);
