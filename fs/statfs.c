@@ -9,10 +9,10 @@
 #include <linux/security.h>
 #include <linux/uaccess.h>
 #include <linux/compat.h>
-#ifdef CONFIG_KSU_SUSFS
+#ifdef CONFIG_SUSFS
 #include <linux/susfs_def.h>
 #include "mount.h"
-#endif // #if defined(CONFIG_KSU_SUSFS_SUS_MOUNT) || defined(CONFIG_KSU_SUSFS_OPEN_REDIRECT)
+#endif // #if defined(CONFIG_SUSFS_SUS_MOUNT) || defined(CONFIG_SUSFS_OPEN_REDIRECT)
 #include "internal.h"
 
 static int flags_by_mnt(int mnt_flags)
@@ -85,15 +85,15 @@ int vfs_get_fsid(struct dentry *dentry, __kernel_fsid_t *fsid)
 }
 EXPORT_SYMBOL(vfs_get_fsid);
 
-#ifdef CONFIG_KSU_SUSFS_SUS_KSTAT
+#ifdef CONFIG_SUSFS_SUS_KSTAT
 extern bool susfs_is_inode_sus_kstat(struct inode *inode, bool *out_is_fuse);
 extern int susfs_sus_kstat_spoof_vfs_statfs(struct inode *inode, struct kstatfs *buf, bool *is_fuse);
-#endif // #ifdef CONFIG_KSU_SUSFS_SUS_KSTAT
-#ifdef CONFIG_KSU_SUSFS_SUS_MOUNT
+#endif // #ifdef CONFIG_SUSFS_SUS_KSTAT
+#ifdef CONFIG_SUSFS_SUS_MOUNT
 extern struct vfsmount *susfs_get_non_sus_vfsmnt_from_vfsmnt(struct vfsmount *vfsmnt);
-#endif //#ifdef CONFIG_KSU_SUSFS_SUS_MOUNT
+#endif //#ifdef CONFIG_SUSFS_SUS_MOUNT
 
-#ifdef CONFIG_KSU_SUSFS_SUS_KSTAT
+#ifdef CONFIG_SUSFS_SUS_KSTAT
 int statfs_by_dentry_wrapper(struct dentry *dentry, struct kstatfs *buf){
 	return statfs_by_dentry(dentry, buf);
 }
@@ -128,12 +128,12 @@ static int susfs_statfs_by_dentry(struct dentry *dentry, struct vfsmount *mnt, s
 	return retval;
 }
 
-#endif // #ifdef CONFIG_KSU_SUSFS_SUS_KSTAT
+#endif // #ifdef CONFIG_SUSFS_SUS_KSTAT
 
 int vfs_statfs(const struct path *path, struct kstatfs *buf)
 {
 	int error;
-#ifdef CONFIG_KSU_SUSFS_SUS_KSTAT
+#ifdef CONFIG_SUSFS_SUS_KSTAT
 	if (susfs_is_current_app_uid()) {
 		struct inode *inode = d_backing_inode(path->dentry);
 		bool is_fuse = false;
@@ -143,9 +143,9 @@ int vfs_statfs(const struct path *path, struct kstatfs *buf)
 			return susfs_statfs_by_dentry(path->dentry, path->mnt, buf, &is_fuse);
 		}
 	}
-#endif // #ifdef CONFIG_KSU_SUSFS_SUS_KSTAT
+#endif // #ifdef CONFIG_SUSFS_SUS_KSTAT
 
-#ifdef CONFIG_KSU_SUSFS_SUS_MOUNT
+#ifdef CONFIG_SUSFS_SUS_MOUNT
 	if (likely(susfs_is_current_proc_umounted())) {
 		struct vfsmount *no_sus_vfsmnt = NULL;
 		no_sus_vfsmnt = susfs_get_non_sus_vfsmnt_from_vfsmnt(path->mnt);
@@ -164,7 +164,7 @@ int vfs_statfs(const struct path *path, struct kstatfs *buf)
 		mntput(no_sus_vfsmnt);
 		return error;
 	}
-#endif // #ifdef CONFIG_KSU_SUSFS_SUS_MOUNT
+#endif // #ifdef CONFIG_SUSFS_SUS_MOUNT
 
 	error = statfs_by_dentry(path->dentry, buf);
 	if (!error)

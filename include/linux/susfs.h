@@ -37,7 +37,7 @@ enum UID_SCHEME {
 /* STRUCT */
 /**********/
 /* sus_path */
-#ifdef CONFIG_KSU_SUSFS_SUS_PATH
+#ifdef CONFIG_SUSFS_SUS_PATH
 struct st_susfs_sus_path {
 	char                                    target_pathname[SUSFS_MAX_LEN_PATHNAME];
 	int                                     err;
@@ -51,15 +51,15 @@ struct st_susfs_sus_path_list {
 #endif
 
 /* sus_mount */
-#ifdef CONFIG_KSU_SUSFS_SUS_MOUNT
+#ifdef CONFIG_SUSFS_SUS_MOUNT
 struct st_susfs_hide_sus_mnts_for_non_su_procs {
 	bool                                    enabled;
 	int                                     err;
 };
-#endif // #ifdef CONFIG_KSU_SUSFS_SUS_MOUNT
+#endif // #ifdef CONFIG_SUSFS_SUS_MOUNT
 
 /* sus_kstat */
-#ifdef CONFIG_KSU_SUSFS_SUS_KSTAT
+#ifdef CONFIG_SUSFS_SUS_KSTAT
 #define KSTAT_SPOOF_INO (1 << 0)
 #define KSTAT_SPOOF_DEV (1 << 1)
 #define KSTAT_SPOOF_NLINK (1 << 2)
@@ -105,7 +105,7 @@ struct st_susfs_sus_kstat_hlist {
 #endif
 
 /* spoof_uname */
-#ifdef CONFIG_KSU_SUSFS_SPOOF_UNAME
+#ifdef CONFIG_SUSFS_SPOOF_UNAME
 struct st_susfs_uname {
 	char                                    release[__NEW_UTS_LEN+1];
 	char                                    version[__NEW_UTS_LEN+1];
@@ -114,7 +114,7 @@ struct st_susfs_uname {
 #endif
 
 /* enable_log */
-#ifdef CONFIG_KSU_SUSFS_ENABLE_LOG
+#ifdef CONFIG_SUSFS_ENABLE_LOG
 struct st_susfs_log {
 	bool                                    enabled;
 	int                                     err;
@@ -122,7 +122,7 @@ struct st_susfs_log {
 #endif
 
 /* spoof_cmdline_or_bootconfig */
-#ifdef CONFIG_KSU_SUSFS_SPOOF_CMDLINE_OR_BOOTCONFIG
+#ifdef CONFIG_SUSFS_SPOOF_CMDLINE_OR_BOOTCONFIG
 struct st_susfs_spoof_cmdline_or_bootconfig {
 	char                                    fake_cmdline_or_bootconfig[SUSFS_FAKE_CMDLINE_OR_BOOTCONFIG_SIZE];
 	int                                     err;
@@ -130,7 +130,7 @@ struct st_susfs_spoof_cmdline_or_bootconfig {
 #endif
 
 /* open_redirect */
-#ifdef CONFIG_KSU_SUSFS_OPEN_REDIRECT
+#ifdef CONFIG_SUSFS_OPEN_REDIRECT
 struct st_susfs_open_redirect {
 	char                                    target_pathname[SUSFS_MAX_LEN_PATHNAME];
 	char                                    redirected_pathname[SUSFS_MAX_LEN_PATHNAME];
@@ -152,7 +152,7 @@ struct st_susfs_open_redirect_hlist {
 #endif
 
 /* sus_map */
-#ifdef CONFIG_KSU_SUSFS_SUS_MAP
+#ifdef CONFIG_SUSFS_SUS_MAP
 struct st_susfs_sus_map {
 	char                                    target_pathname[SUSFS_MAX_LEN_PATHNAME];
 	int                                     err;
@@ -187,45 +187,45 @@ struct st_susfs_version {
 /* FORWARD DECLARATION */
 /***********************/
 /* sus_path */
-#ifdef CONFIG_KSU_SUSFS_SUS_PATH
+#ifdef CONFIG_SUSFS_SUS_PATH
 void susfs_add_sus_path(void __user **user_info);
 void susfs_add_sus_path_loop(void __user **user_info);
 #endif
 
 /* sus_mount */
-#ifdef CONFIG_KSU_SUSFS_SUS_MOUNT
+#ifdef CONFIG_SUSFS_SUS_MOUNT
 void susfs_set_hide_sus_mnts_for_non_su_procs(void __user **user_info);
-#endif // #ifdef CONFIG_KSU_SUSFS_SUS_MOUNT
+#endif // #ifdef CONFIG_SUSFS_SUS_MOUNT
 
 /* sus_kstat */
-#ifdef CONFIG_KSU_SUSFS_SUS_KSTAT
+#ifdef CONFIG_SUSFS_SUS_KSTAT
 void susfs_add_sus_kstat(void __user **user_info);
 void susfs_update_sus_kstat(void __user **user_info);
 #endif
 
 /* spoof_uname */
-#ifdef CONFIG_KSU_SUSFS_SPOOF_UNAME
+#ifdef CONFIG_SUSFS_SPOOF_UNAME
 void susfs_set_uname(void __user **user_info);
 void susfs_spoof_uname(struct new_utsname* tmp);
 #endif
 
 /* enable_log */
-#ifdef CONFIG_KSU_SUSFS_ENABLE_LOG
+#ifdef CONFIG_SUSFS_ENABLE_LOG
 void susfs_enable_log(void __user **user_info);
 #endif
 
 /* spoof_cmdline_or_bootconfig */
-#ifdef CONFIG_KSU_SUSFS_SPOOF_CMDLINE_OR_BOOTCONFIG
+#ifdef CONFIG_SUSFS_SPOOF_CMDLINE_OR_BOOTCONFIG
 void susfs_set_cmdline_or_bootconfig(void __user **user_info);
 #endif
 
 /* open_redirect */
-#ifdef CONFIG_KSU_SUSFS_OPEN_REDIRECT
+#ifdef CONFIG_SUSFS_OPEN_REDIRECT
 void susfs_add_open_redirect(void __user **user_info);
 #endif
 
 /* sus_map */
-#ifdef CONFIG_KSU_SUSFS_SUS_MAP
+#ifdef CONFIG_SUSFS_SUS_MAP
 void susfs_add_sus_map(void __user **user_info);
 #endif
 
