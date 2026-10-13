@@ -21,11 +21,11 @@
 #include <linux/uaccess.h>
 #include <asm/unistd.h>
 
-#ifdef CONFIG_KSU_SUSFS_SUS_KSTAT
+#ifdef CONFIG_SUSFS_SUS_KSTAT
 #include <linux/susfs_def.h>
 extern bool susfs_is_inode_sus_kstat(struct inode *inode, bool *out_is_fuse);
 extern void susfs_sus_kstat_spoof_generic_fillattr(struct inode *inode, struct kstat *stat, u32 result_mask);
-#endif // #ifdef CONFIG_KSU_SUSFS_SUS_KSTAT
+#endif // #ifdef CONFIG_SUSFS_SUS_KSTAT
 
 /**
  * generic_fillattr - Fill in the basic attributes from the inode struct
@@ -83,7 +83,7 @@ int vfs_getattr_nosec(const struct path *path, struct kstat *stat,
 	if (IS_AUTOMOUNT(inode))
 		stat->attributes |= STATX_ATTR_AUTOMOUNT;
 
-#ifdef CONFIG_KSU_SUSFS_SUS_KSTAT
+#ifdef CONFIG_SUSFS_SUS_KSTAT
 	if (susfs_is_current_app_uid()) {
 		bool is_fuse = false;
 		if (susfs_is_inode_sus_kstat(d_backing_inode(path->dentry), &is_fuse)) {
@@ -97,10 +97,10 @@ int vfs_getattr_nosec(const struct path *path, struct kstat *stat,
 			stat->result_mask |= STATX_SUS_KSTAT_FUSE;
 		}
 	}
-#endif // #ifdef CONFIG_KSU_SUSFS_SUS_KSTAT
+#endif // #ifdef CONFIG_SUSFS_SUS_KSTAT
 
 	if (inode->i_op->getattr)
-#ifdef CONFIG_KSU_SUSFS_SUS_KSTAT
+#ifdef CONFIG_SUSFS_SUS_KSTAT
 	{
 		int err = inode->i_op->getattr(path, stat, request_mask,
 					    query_flags);
@@ -129,7 +129,7 @@ int vfs_getattr_nosec(const struct path *path, struct kstat *stat,
 #else
 		return inode->i_op->getattr(path, stat, request_mask,
 					    query_flags);
-#endif // #ifdef CONFIG_KSU_SUSFS_SUS_KSTAT
+#endif // #ifdef CONFIG_SUSFS_SUS_KSTAT
 
 	generic_fillattr(inode, stat);
 	return 0;

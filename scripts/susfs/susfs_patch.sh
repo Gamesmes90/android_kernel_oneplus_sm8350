@@ -36,6 +36,9 @@ fi
 # Download patch from HEAD
 curl -O https://raw.githubusercontent.com/JackA1ltman/NonGKI_Kernel_Build_2nd/refs/heads/mainline/Patches/Patch/$PATCH_FILE
 
+# Change all 'CONFIG_KSU_SUSFS' occurrences to 'CONFIG_SUSFS'
+sed -i 's/CONFIG_KSU_SUSFS/CONFIG_SUSFS/g' $PATCH_FILE
+
 # Detach with upstream branch as base
 git checkout --detach $UPSTREAM
 
