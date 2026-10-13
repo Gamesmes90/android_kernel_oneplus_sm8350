@@ -1,0 +1,28 @@
+# 📦 Release Notes
+
+> ⚠️ **Flash at your own risk**
+
+> ⚠️ Only **Android 17** ROMs
+
+---
+
+## Features
+- **KernelSU Next** legacy v3.4.0 / **BakaSU** Latest
+- **SUSFS** v2.3.0
+- **BORE** Scheduler
+- **Droidspaces** Support
+- **BBR** Congestion algorithm
+- **FQ** Fair Queue Scheduling
+- **250Hz** Kernel timer interrupt frequency
+- **LZO** Compression algorithm
+- **KernelSU Module** for device tweaks
+---
+
+## 📝 Flashing instructions
+* Backup **vendor_boot.img**, **vendor_dlkm.img**, and **boot.img** before flashing
+* Flash the AK3 zip file with a kernel flasher app or in recovery with ``adb sideload [kernel.zip]``
+* Check for updates with the KernelSU module action button (Kernel Tweaks)
+
+---
+
+## Changelog
