@@ -1,3 +1,7 @@
+# Custom OnePlus 9/9 Pro Linux Kernel 5.4
+For all features see [FEATURES.md](./Documentation/FEATURES.md)
+
+
 # How do I submit patches to Android Common Kernels
 
 1. BEST: Make all of your changes to upstream Linux. If appropriate, backport to the stable releases.
