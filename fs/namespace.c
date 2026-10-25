@@ -1269,10 +1269,8 @@ bypass_orig_flow:
 	mnt->mnt.mnt_flags &= ~(MNT_WRITE_HOLD|MNT_MARKED|MNT_INTERNAL);
 
 #ifdef CONFIG_SUSFS_SUS_MOUNT
-	if (static_branch_unlikely(&susfs_is_sdcard_android_data_not_decrypted)) {
-		if (susfs_is_current_ksu_domain() && (flag & CL_COPY_MNT_NS))
+	if (unlikely(is_mnt_ksu_unshared))
 		mnt->mnt.mnt_flags |= VFSMOUNT_MNT_FLAGS_KSU_UNSHARED_MNT;
-	}
 #endif // #ifdef CONFIG_SUSFS_SUS_MOUNT
 
 	atomic_inc(&sb->s_active);
