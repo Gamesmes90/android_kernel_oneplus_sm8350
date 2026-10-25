@@ -16,5 +16,5 @@ sed -i '/__attribute__((hot))/{N;N;/ksu_handle_post_execveat/d;}' fs/exec.c
 sed -i '/	ksu_handle_post_execveat(&fd, &filename, &argv, &envp, &flags, &retval);/d' fs/exec.c
 
 # Spoofing if needed
-#sed -i 's|KSU_GIT_TAG := $(shell cd $(GIT_ROOT) && $(LPATH) git describe --tags --abbrev=0 2>/dev/null)|KSU_GIT_TAG := v3.3.0|g' KernelSU-Next/kernel/Kbuild
-#sed -i 's|KSU_GIT_VERSION := $(shell cd $(GIT_ROOT) && $(LPATH) git rev-list --count HEAD 2>/dev/null)|KSU_GIT_VERSION := 3014|g' KernelSU-Next/kernel/Kbuild
+sed -i 's|KSU_GIT_TAG := $(shell cd $(GIT_ROOT) && $(LPATH) git describe --tags --abbrev=0 2>/dev/null)|KSU_GIT_TAG := v3.4.2-legacy|g' KernelSU-Next/kernel/Kbuild
+sed -i 's|KSU_GIT_VERSION := $(shell cd $(GIT_ROOT) && $(LPATH) git rev-list --count HEAD 2>/dev/null)|KSU_GIT_VERSION := 3066|g' KernelSU-Next/kernel/Kbuild
