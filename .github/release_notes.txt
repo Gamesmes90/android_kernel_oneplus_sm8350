@@ -7,7 +7,7 @@
 ---
 
 ## Features
-- **KernelSU Next** legacy v3.4.0 / **BakaSU** Latest
+- **KernelSU Next** legacy v3.4.2 (spoofed) / **BakaSU** Latest
 - **SUSFS** v2.3.0
 - **BORE** Scheduler
 - **Droidspaces** Support
