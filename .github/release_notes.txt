@@ -18,6 +18,12 @@
 - **KernelSU Module** for device tweaks
 ---
 
+## Build Types
+- [KernelSU Next](https://github.com/Gamesmes90/KernelSU-Next/tree/legacy-susfs) with [manual hook](https://kernelsu-next.github.io/webpage/pages/how-to-integrate-for-non-gki.html#manually-modify-the-kernel-source) (``ksun``)
+- [BakaSU](https://github.com/Baka-SU/BakaSU)
+  - with [manual hook](https://bakasu.org/guide/build#manual-hooks) (``bakasu``)
+  - with [SUSFS inline hook](https://bakasu.org/guide/build#susfs) (``bakasu_susfs-inline-hook``)
+
 ## 📝 Flashing instructions
 * Backup **vendor_boot.img**, **vendor_dlkm.img**, and **boot.img** before flashing
 * Flash the AK3 zip file with a kernel flasher app or in recovery with ``adb sideload [kernel.zip]``
@@ -26,3 +32,4 @@
 ---
 
 ## Changelog
+- [Upstream changes](https://github.com/LineageOS/android_kernel_oneplus_sm8350/commits/lineage-24.0/)
