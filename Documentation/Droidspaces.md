@@ -1,4 +1,6 @@
 # Droidspaces
+This kernel is part of the [GKI supported devices list](https://github.com/ravindu644/Droidspaces-OSS/pull/353) of [Droidpsaces](https://www.droidspaces.org/docs/community-supported-devices.html)
+
 Support for [Droidspaces](https://github.com/ravindu644/Droidspaces-OSS)
 
 - [ABI padding patch](https://github.com/ravindu644/Droidspaces-OSS/blob/main/Documentation/resources/kernel-patches/GKI/below-kernel-6.12/001.GKI-below-6.12-fix_sysvipc_kabi_6_7_8.patch)
